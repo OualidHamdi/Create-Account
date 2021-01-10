@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+</head>
+<body>
+		<fieldset>
+			<legend>Login</legend>
+						<table>
+				<tr>
+					<td>Email :</td>
+					<td><input type="email" placeholder="Email" id="email"> </td>
+				</tr>
+				<tr>
+					<td>Password : </td>
+					<td><input type="password" placeholder="Pass" id="pass">
+						<input type="button" name="" value="show" id="showPass" onclick="showPass();">
+					</td>
+				</tr>
+				<tr>
+					<td>Confirme Password : </td>
+					<td><input type="password" placeholder="Confirme Pass" id="confPass">
+					<input type="button" name="" value="show" id="showConPass" onclick="confPass();">
+					</td>
+				</tr>
+				<tr>
+					<td></td> 
+					<td><input type="button" value="Inscrire" onclick="inscrire()"></td>
+				</tr>
+			</table>		
+		</fieldset> 
+
+		<fieldset>
+			<legend>Pannel Admin</legend>
+			<div id="taable">
+					
+				</div>	
+		</fieldset> 
+
+
+		<fieldset id="connnet" >
+			<legend>Connexion</legend>
+			<table>
+				<tr>
+					<td>Email : </td>
+					<td><input type="email" placeholder="Email" id="conexEmail"> </td>
+				</tr>
+				<tr>
+					<td>Password : </td>
+					<td><input type="password" placeholder="Pass" id="conexPass">
+						<input type="button" name="" value="show" id="showPassCon" onclick="showPassCon();">		
+					</td>
+				</tr>
+				<tr>
+					<td></td> 
+					<td><input type="button" value="Connexion" onclick="login()"></td>
+				</tr>
+			</table>			
+		</fieldset> 
+
+		<fieldset id="liiiste" style="display: none;">
+			<legend>Profil</legend>
+				<label>Add friend : </label>
+				<input type="email" name="" placeholder="Add Friend" id="emailFreind">
+				<input type="button" value="Ajouter" name="" onclick="addFriend()"><br><br>
+				<textarea style="resize: none;" cols="43" rows="8" readonly id="LiistFriend"></textarea>
+				<hr>
+				<input type="button" name="" value="Déconécter" onclick="Liiste()">
+		</fieldset>
+		
+
+		<script type="text/javascript">
+			var table = [];
+			var friend = [];
+			var i=0;
+var c, r, t;
+t = document.createElement('table');
+t.setAttribute("id", "myTable");
+r = t.insertRow(0); 
+c = r.insertCell(0);
+c.innerHTML = "Email";
+c = r.insertCell(1);
+c.style.cssText="border:solid 2px black;background:darkgray;font-size:20px;color:white;text-align:center";
+c.innerHTML = "Password";
+c = r.insertCell(2);
+c.innerHTML = "Action";
+
+t.style.cssText="border:solid 2px black;border-collapse: collapse;width: 60%;margin:auto;";
+r.style.cssText="border:solid 2px black;background:darkgray;font-size:20px;color:white;text-align:center";
+c.style.cssText="border:solid 2px black;background:darkgray;font-size:20px;color:white;text-align:center";
+document.getElementById("taable").appendChild(t);
+
+	
+		
+	function inscrire() {
+
+		var email = document.getElementById('email').value;
+		var pass = document.getElementById('pass').value;
+		var confPass = document.getElementById('confPass').value;
+		var active = "Désactive";
+
+var trouve = false;
+			if(email!="" &&pass!="" &&confPass!=""){
+				if (pass==confPass){
+
+				for(i=0;i<table.length;i++){
+
+					if (table[i].Login == email ){
+						trouve=true;	
+						break;
+					}
+				
+				}
+
+				if(trouve==false){
+					var user = {
+							Login:email,
+							Pass:pass,
+							Activation:active,
+							List:[]
+						};
+						user.List.push(friend); 
+						table.push(user);
+						console.log(table)
+			r = t.insertRow(1); 
+c = r.insertCell(0);
+
+c.innerHTML = email;
+c = r.insertCell(1);
+c.innerHTML = pass;
+
+
+c = r.insertCell(2);
+c.innerHTML = "<input type='button' value='Active' class='buttActiv' id='buttActiv' style='background=' onclick='active(this);'/>";
+
+		}else{
+			alert('Email Déja Exsisté');
+		}
+				}else{
+					alert('Error Password');
+				}
+			}else{
+				alert('Remplir tout les champ');
+			}
+			
+
+
+				document.getElementById('email').value="";
+				document.getElementById('pass').value="";
+				document.getElementById('confPass').value="";
+		
+	}
+
+
+
+	function active(obj){
+
+	/*	const list = document.querySelector('#taable')
+		const listItems = list.children
+		console.log(listItems)*/
+
+		var test=obj.value;
+			if (test == "Active"){
+				obj.value="Désactive";
+			}else{
+				obj.value="Active";
+			}
+	}
+
+	function login(){
+			var trouvve = false;
+				var email = document.getElementById('conexEmail');
+				var pass = document.getElementById('conexPass');
+
+				if (email.value!="" && pass.value!="" ){
+					for (i=0;i<table.length;i++){
+
+					if (table[i].Login == email.value &&
+					 	table[i].Pass == pass.value){
+						if(table[i].Activation=="Active"){
+							trouvve=true;
+						alert("Welcome");
+						document.getElementById('liiiste').style.display="block";
+						document.getElementById('connnet').style.display="none";
+
+
+						break;
+						}else{
+						trouvve=true;
+						alert("Compte n'est pas Activé");
+						break;
+						}
+					}
+				
+				}
+
+				if (trouvve==false){
+					alert("compte n'existe pas");
+				}
+			}else{
+alert("Remplir les champte")
+			}
+
+			}
+
+		
+
+			document.addEventListener("click",function(event){
+				if(event.srcElement.className == "buttActiv"){
+					//console.log(this);
+					//console.log(event);
+					var element = document.getElementsByClassName("buttActiv");
+					var email =event.target.parentElement.previousSibling.previousSibling.innerHTML;
+						for (var i = 0; i < table.length; i++) {
+							if (table[i].Login==email){
+								if (table[i].Activation =="Active"){
+										table[i].Activation="Désactive"; 
+							document.getElementById('liiiste').style.display="none";
+							document.getElementById('connnet').style.display="block";
+
+								}else{
+										table[i].Activation="Active";
+								}
+									break;
+							}
+						}	
+				}
+			})
+
+			
+
+			function Liiste(){
+
+					document.getElementById('liiiste').style.display="none";
+					document.getElementById('connnet').style.display="block";
+			}
+
+			function showPass(){
+				var tyype = document.getElementById('pass').type;
+				
+				if (tyype == "password"){
+					document.getElementById('pass').type="text";
+					document.getElementById('showPass').value="Hide";
+				}else{
+					document.getElementById('pass').type="password";
+					document.getElementById('showPass').value="Show";
+				}
+			}
+
+			function confPass(){
+				var tyype = document.getElementById('confPass').type;
+				
+				if (tyype == "password"){
+					document.getElementById('confPass').type="text";
+					document.getElementById('showConPass').value="Hide";
+				}else{
+					document.getElementById('confPass').type="password";
+					document.getElementById('showConPass').value="Show";
+				}
+			}
+
+			function showPassCon(){
+				var tyype = document.getElementById('conexPass').type;
+				
+				if (tyype == "password"){
+					document.getElementById('conexPass').type="text";
+					document.getElementById('showPassCon').value="Hide";
+				}else{
+					document.getElementById('conexPass').type="password";
+					document.getElementById('showPassCon').value="Show";
+				}
+			}
+
+			function addFriend(){
+				var trouuuv = false;
+				var emailFriend = document.getElementById('emailFreind').value;
+				
+					for (var i = 0; i < table.length; i++) {
+							if (table[i].Login==emailFriend){
+									friend.push(emailFriend);
+									// user.List.push(friend); 
+									// table.push(user);
+						trouuuv = true;
+				if(table[i].Activation =="Active"){
+					document.getElementById('LiistFriend').innerHTML+= '- '+emailFriend+"\n"
+					break;
+								}else{
+									alert("Ce compte n'est pas encore Activé !");
+									break;
+								} 
+									
+							}
+									
+							}
+							if(trouuuv==false){
+							alert("Ce compte n'existe pas'");
+
+							}
+
+							console.log(friend);
+					}	
+
+
+
+		</script>
+</body>
+</html>
